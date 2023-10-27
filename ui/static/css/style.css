@@ -1,0 +1,123 @@
+body {
+    margin: 0; /*0 100px 0 100px;*/
+    background-color: #ffeeed; /* BACKLOG BACK */
+}
+
+header {
+    display: flex;
+    background-color: #ffd1dc; /* HEADER BACK */
+}
+
+.backlog {
+    margin-top: 30px;
+}
+
+.backlog_name {
+    text-align: center;
+}
+
+.sticker {
+    margin: 7%;
+    padding: 10px;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    text-align: left;
+    box-shadow: 1px 1px 5px #A8A66E;
+}
+
+.sticker_backlog {
+    margin: 2%;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    text-align: left;
+    box-shadow: 1px 1px 5px #A8A66E;
+}
+
+.left, .right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left {
+    width: 30%;
+}
+
+.right {
+    width: 70%;
+}
+
+.project_name {
+    padding-left: 195px;
+}
+
+.quit_icon {
+    width: 30px;
+    height: 30px;
+    margin: 0px 0px 0px 10px;
+}
+
+
+.profile_icon {
+    width: 40px;
+    height: 40px;
+    margin: 5px 10px 0 0;
+}
+
+.columns {
+    display: flex;
+    justify-content: space-around;
+}
+
+.column1, .column3 {
+    background-color: #faeedd;   /* CORNER COLUMNS BACK */
+    width: 100%;
+    text-align:center;
+}
+
+.column2 {
+    background-color: #fff8e7; /* MIDDLE COLUMN BACK */
+    width: 100%;
+    text-align:center;
+}
+
+#task_pg2 {
+    display: flex;
+    margin: 1%;
+    padding: 0px 25px;
+}
+
+#task_pg3 {
+    margin: 1%;
+    padding: 25px 50px;
+    height: 400px;
+}
+
+#task_name_pg2 {
+    width: 70%;
+}
+
+.task_status {
+    width: 30%;
+}
+
+.que {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.button {
+    text-decoration: none;
+    color: black;
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 10px;
+    background-color: white;
+}
