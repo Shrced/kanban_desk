@@ -55,7 +55,7 @@ header {
 .quit_icon {
     width: 30px;
     height: 30px;
-    margin: 0px 0px 0px 10px;
+    margin: 0 0 0 10px;
 }
 
 
@@ -85,7 +85,7 @@ header {
 #task_pg2 {
     display: flex;
     margin: 1%;
-    padding: 0px 25px;
+    padding: 0 25px;
 }
 
 #task_pg3 {
