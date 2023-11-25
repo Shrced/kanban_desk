@@ -7,25 +7,30 @@ import (
 
 var ErrNoRecord = errors.New("models: подходящей записи не найдено")
 
-type User struct {
-	ID        int
-	Login     string
-	Gender    string
-	BirthYear int
-	KanbanID  int
+type Users struct {
+	UserID   int
+	Gender   string
+	Username string
+	Password string
+	FullName string
 }
 
-type Kanban struct {
-	ID           int
-	TaskID       int
-	Expires      time.Time
-	CreationDate time.Time
+type Boards struct {
+	BoardID    int
+	BoardName  string
+	CreateDate time.Time
+	Task       []Tasks
+	UserID     int
 }
 
-type Task struct {
-	ID           int
-	UserID       int
-	Name         string
-	Priotity     string
-	CreationDate time.Time
+type Tasks struct {
+	TaskID   int
+	TaskName string
+	Status   string
+	Board    []Boards
+}
+
+type TasksBoards struct {
+	TaskID  int
+	BoardID int
 }

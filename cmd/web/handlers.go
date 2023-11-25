@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"mephi/kanban/pkg/models"
 	"net/http"
 	"strconv"
@@ -15,29 +14,23 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	files := []string{
-		"./ui/html/kanban_desk.html",
-	}
-
-	ts, err := template.ParseFiles(files...)
+	board, err := app.boards.GetCurrentBoard()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	err = ts.Execute(w, nil)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	fmt.Fprintf(w, "%v\n", board)
+
 }
 
-func (app *application) showKanban(w http.ResponseWriter, r *http.Request) {
+func (app *application) showBoard(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return
 	}
-	s, err := app.kanban.GetKanban(id)
+	s, err := app.boards.GetBoard(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -51,14 +44,13 @@ func (app *application) showKanban(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%v", s)
 }
 
-func (app *application) createKanban(w http.ResponseWriter, r *http.Request) {
+func (app *application) createBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
 		app.clientError(w, http.StatusMethodNotAllowed) // Используем помощник clientError()
 		return
 	}
-	taskId := 1
-	id, err := app.kanban.InsertKanban(taskId)
+	id, err := app.boards.InsertBoard("test_board", 1, []int{1})
 	if err != nil {
 		app.serverError(w, err)
 		return

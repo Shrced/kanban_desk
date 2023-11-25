@@ -15,12 +15,14 @@ import (
 type application struct {
 	errorLog *log.Logger
 	infoLog  *log.Logger
-	kanban   *mysql.KanbanModel
+	boards   *mysql.BoardsModel
+	tasks    *mysql.TasksModel
+	users    *mysql.UsersModel
 }
 
 func main() {
 	addr := flag.String("addr", ":4000", "Сетевой адрес веб-сервера")
-	dsn := flag.String("dsn", "web:123098@/kanban?parseTime=true", "Название MySQL источника данных")
+	dsn := flag.String("dsn", "cat:1111@/kanban?parseTime=true", "Название MySQL источника данных")
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -36,7 +38,9 @@ func main() {
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
-		kanban:   &mysql.KanbanModel{DB: db},
+		boards:   &mysql.BoardsModel{DB: db},
+		tasks:    &mysql.TasksModel{DB: db},
+		users:    &mysql.UsersModel{DB: db},
 	}
 
 	srv := &http.Server{
