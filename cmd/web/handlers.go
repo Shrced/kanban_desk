@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"html/template"
 	"mephi/kanban/pkg/models"
 	"net/http"
 	"strconv"
@@ -38,6 +39,27 @@ func (app *application) showBoard(w http.ResponseWriter, r *http.Request) {
 			app.serverError(w, err)
 		}
 		return
+
+	}
+
+	files := []string{
+		"./ui/html/show.board.html",
+		"./ui/html/base.layout.html",
+		"./ui/html/footer.partial.html",
+	}
+
+	// Парсинг файлов шаблонов...
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	// А затем выполняем их. Обратите внимание на передачу заметки с данными
+	// (структура models.Boards) в качестве последнего параметра.
+	err = ts.Execute(w, s)
+	if err != nil {
+		app.serverError(w, err)
 	}
 
 	// Отображаем весь вывод на странице.

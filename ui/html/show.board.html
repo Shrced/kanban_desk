@@ -1,0 +1,15 @@
+{{template "base" .}}
+
+{{define "title"}}Заметка #{{.BoardID}}{{end}}
+
+{{define "main"}}
+    <div class='snippet'>
+        <div class='metadata'>
+            <strong>{{.BoardName}}</strong>
+            <span>#{{.BoardName}}</span>
+        </div>
+        <div class='metadata'>
+            <time>Создан: {{.CreateDate}}</time>
+        </div>
+    </div>
+{{end}}

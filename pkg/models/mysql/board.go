@@ -88,7 +88,7 @@ func (m *BoardsModel) GetUsersBoards(userID int) ([]*models.Boards, error) {
 
 func (m *BoardsModel) GetCurrentBoard() (*models.Boards, error) {
 	stmt := `SELECT boards.boardID, boards.boardName, boards.userID, boards.createDate FROM boards
-    WHERE DATE_ADD(board.createDate, INTERVAL 2 WEEK) > (CURDATE() + board.createDate)`
+    WHERE DATE_ADD(boards.createDate, INTERVAL 2 WEEK) > CURDATE()`
 
 	row := m.DB.QueryRow(stmt)
 
