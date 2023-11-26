@@ -27,7 +27,7 @@ type Tasks struct {
 	TaskID   int
 	TaskName string
 	Status   string
-	Board    []Boards
+	BoardID  int
 }
 
 type TasksBoards struct {

@@ -7,17 +7,18 @@ import (
 	"net/http"
 	"os"
 
-	"mephi/kanban/pkg/models/mysql" // Новый импорт
+	"mephi/kanban/pkg/models/mysql"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type application struct {
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	boards   *mysql.BoardsModel
-	tasks    *mysql.TasksModel
-	users    *mysql.UsersModel
+	errorLog     *log.Logger
+	infoLog      *log.Logger
+	boards       *mysql.BoardsModel
+	tasks        *mysql.TasksModel
+	tasks_boards *mysql.TasksBoardsModel
+	users        *mysql.UsersModel
 }
 
 func main() {
@@ -36,11 +37,12 @@ func main() {
 	defer db.Close()
 
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-		boards:   &mysql.BoardsModel{DB: db},
-		tasks:    &mysql.TasksModel{DB: db},
-		users:    &mysql.UsersModel{DB: db},
+		errorLog:     errorLog,
+		infoLog:      infoLog,
+		boards:       &mysql.BoardsModel{DB: db},
+		tasks:        &mysql.TasksModel{DB: db},
+		users:        &mysql.UsersModel{DB: db},
+		tasks_boards: &mysql.TasksBoardsModel{DB: db},
 	}
 
 	srv := &http.Server{

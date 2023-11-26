@@ -1,70 +1,52 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <meta charset="utf-8">
-    <title></title>
-</head>
-<body>
-<header>
-    <div class="left">
-        <img src="../static/img/quit_icon.png" class="quit_icon" alt="">
-        <p>До конца спринта осталось 5 дней</p>
-    </div>
-    <div class="right">
-        <h3 class="project_name">Kanban Board</h3>
-        <a href="./task_list.html" class="button">Список задач</a>
-        <img src="../static/img/profile_icon.png" class="profile_icon" alt="">
-    </div>
-</header>
-<main>
-    <section class="columns">
-        <div class="column1">
-            <h3>To do</h3>
-            <div class="sticker">
-                <a href="./task.html"><p class="task_number">Task 1</p></a>
-                <p class="task_name">Здесь будет название и описание задачи</p>
-                <p class="task_priority">Приоритет: высокий</p>
-            </div>
-            <div class="sticker">
-                <p class="task_number">Task 2</p>
-                <p class="task_name">Здесь будет название и описание задачи</p>
-                <p class="task_priority">Приоритет: высокий</p>
-            </div>
-            <div class="sticker">
-                <p class="task_number">Task 3</p>
-                <p class="task_name">Здесь будет название и описание задачи</p>
-                <p class="task_priority">Приоритет: высокий</p>
-            </div>
-        </div>
-        <div class="column2">
-            <h3>In progress</h3>
-            <div class="sticker">
-                <p class="task_number">Task 1</p>
-                <p class="task_name">Здесь будет название и описание задачи</p>
-                <p class="task_priority">Приоритет: высокий</p>
-            </div>
-        </div>
-        <div class="column3">
-            <h3>Done</h3>
-            <div class="sticker">
-                <p class="task_number">Task 1</p>
-                <p class="task_name">Здесь будет название и описание задачи</p>
-                <p class="task_priority">Приоритет: высокий</p>
-            </div>
-        </div>
-    </section>
-    <section class="backlog">
-        <h2 class="backlog_name">Backlog</h2>
-        <div class="sticker_backlog">
-            <p class="task_number">Task 1</p>
-            <p class="task_name">Здесь будет название и описание задачи</p>
-            <p class="task_priority">Приоритет: высокий</p>
-        </div>
-    </section>
-</main>
-<footer>
+{{template "base" .}}
 
-</footer>
-</body>
-</html>
+{{define "title"}}Boards{{end}}
+
+
+{{define "main"}}
+
+    <section class="columns">
+            <div class="column1">
+                <h3>To do</h3>
+                {{if .TasksList}}
+                {{range .TasksList}}
+                {{if eq .Status "to do"}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Статус задачи: {{.Status}}</p>
+                    <p class="task_priority">Приоритет: высокий</p>
+                </div>
+                {{end}}
+                {{end}}
+                {{end}}
+            </div>
+            <div class="column2">
+                <h3>In progress</h3>
+                {{if .TasksList}}
+                {{range .TasksList}}
+                {{if eq .Status "in progress"}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Статус задачи: {{.Status}}</p>
+                    <p class="task_priority">Приоритет: высокий</p>
+                </div>
+                {{end}}
+                {{end}}
+                {{end}}
+            </div>
+            <div class="column3">
+                <h3>Done</h3>
+                {{if .TasksList}}
+                {{range .TasksList}}
+                {{if eq .Status "done"}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Статус задачи: {{.Status}}</p>
+                    <p class="task_priority">Приоритет: высокий</p>
+                </div>
+                {{end}}
+                {{end}}
+                {{end}}
+            </div>
+    </section>
+{{end}}

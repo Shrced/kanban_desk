@@ -1,36 +1,13 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <meta charset="utf-8">
-    <title></title>
-</head>
-<body>
-<header>
-    <div class="left">
-        <img src="../static/img/quit_icon.png" class="quit_icon" alt="">
-        <p>До конца спринта осталось 5 дней</p>
+{{template "base" .}}
+
+{{define "title"}}Задача номер {{.Tasks.TaskID}}{{end}}
+
+{{define "main"}}
+    <div class="sticker" id="task_{{.Tasks.TaskID}}">
+        <div class="sticker">
+            <p>Имя задачи: {{.Tasks.TaskName}}</p>
+            <p>Статус задачи: {{.Tasks.Status}}</p>
+            <p class="task_priority">Приоритет: высокий</p>
+        </div>
     </div>
-    <div class="right">
-        <h3 class="project_name">Kanban Board</h3>
-        <a href="./kanban_desk.html" class="button">Назад</a>
-        <img src="../static/img/profile_icon.png" class="profile_icon" alt="">
-    </div>
-</header>
-<main>
-    <div class="sticker" id="task_pg3">
-        <p class="task_name" id="task_name_pg2">Страничка задачи</p>
-        <label>
-            <input class="que" type="text" placeholder="Введите описание задачи">
-        </label>
-        <label for="pet-select"></label><select class="que" name="pets" id="pet-select">
-            <option value="">Выберите приоритет</option>
-            <option value="high">Высокий</option>
-            <option value="middle">Средний</option>
-            <option value="low">Низкий</option>
-        </select>
-        <input class="que" type="file" name="userphoto">
-    </div>
-</main>
-</body>
-</html>
+{{end}}

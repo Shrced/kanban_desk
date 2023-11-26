@@ -1,0 +1,17 @@
+{{template "base" .}}
+
+{{define "title"}}Добавление задачи{{end}}
+
+
+{{define "main"}}
+<h3>Add Product</h3>
+<form method="POST">
+    <label>Имя задачи</label><br>
+    <input type="text" name="task_name" /><br><br>
+    <label>Статус задачи</label><br>
+    <input type="text" name="status" /><br><br>
+    <label>Id доски для прикрепления</label><br>
+    <input type="number" name="board_id" placeholder="Current is:{{.Boards.BoardID}}" value="{{.Boards.BoardID}}"/><br><br>
+    <input type="submit" value="Send" />
+</form>
+{{end}}

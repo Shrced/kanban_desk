@@ -10,7 +10,21 @@ type TasksModel struct {
 	DB *sql.DB
 }
 
-func (m *TasksModel) InsertTask(taskName string, status string, boards []int) (int, error) {
+type TasksBoardsModel struct {
+	DB *sql.DB
+}
+
+func (m *TasksBoardsModel) InsertTaskBoards(TaskId, BoardId int) error {
+	query := "INSERT INTO tasks_boards (taskID, boardID) VALUES (?, ?)"
+	_, err := m.DB.Exec(query, TaskId, BoardId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *TasksModel) InsertTask(taskName string, status string, BoardID int) (int, error) {
 	stmt := `INSERT INTO tasks (taskName, status)
     VALUES(?, ?)`
 
@@ -19,20 +33,25 @@ func (m *TasksModel) InsertTask(taskName string, status string, boards []int) (i
 		return 0, err
 	}
 
-	id, err := result.LastInsertId()
+	TaskID, err := result.LastInsertId()
 	if err != nil {
 		return 0, err
 	}
 
-	for _, boardID := range boards {
-		query := "INSERT INTO tasks_boards (taskID, boardID) VALUES ($1, $2)"
-		_, err = m.DB.Exec(query, id, boardID)
-		if err != nil {
-			return 0, err
-		}
+	// for _, boardID := range boards {
+	// 	query := "INSERT INTO tasks_boards (taskID, boardID) VALUES ($1, $2)"
+	// 	_, err = m.DB.Exec(query, id, boardID)
+	// 	if err != nil {
+	// 		return 0, err
+	// 	}
+	// }
+	query := "INSERT INTO tasks_boards (taskID, boardID) VALUES (?, ?)"
+	_, err2 := m.DB.Exec(query, TaskID, BoardID)
+	if err2 != nil {
+		return 0, err2
 	}
 
-	return int(id), nil
+	return int(TaskID), nil
 }
 
 func (m *TasksModel) GetTask(taskID int) (*models.Tasks, error) {
@@ -55,10 +74,10 @@ func (m *TasksModel) GetTask(taskID int) (*models.Tasks, error) {
 	return s, nil
 }
 
-func (m *BoardsModel) GetBoardsTasks(boardID int) ([]*models.Tasks, error) {
+func (m *TasksModel) GetBoardsTasks(boardID int) ([]*models.Tasks, error) {
 	stmt := `SELECT tasks.taskID, tasks.taskName, tasks.status FROM tasks 
     JOIN tasks_boards ON tasks.taskID  = tasks_boards.taskID
-    WHERE tasks_boards.userID = ?`
+    WHERE tasks_boards.boardID = ?`
 
 	rows, err := m.DB.Query(stmt, boardID)
 	defer rows.Close()
