@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"mephi/kanban/pkg/models"
 	"mephi/kanban/pkg/models/mysql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -19,6 +20,7 @@ type application struct {
 	tasks        *mysql.TasksModel
 	tasks_boards *mysql.TasksBoardsModel
 	users        *mysql.UsersModel
+	cache        map[string]*models.Users
 }
 
 func main() {
@@ -43,6 +45,7 @@ func main() {
 		tasks:        &mysql.TasksModel{DB: db},
 		users:        &mysql.UsersModel{DB: db},
 		tasks_boards: &mysql.TasksBoardsModel{DB: db},
+		cache:        make(map[string]*models.Users),
 	}
 
 	srv := &http.Server{

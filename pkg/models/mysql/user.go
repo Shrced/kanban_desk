@@ -46,3 +46,23 @@ func (m *UsersModel) GetUser(UserID int) (*models.Users, error) {
 
 	return s, nil
 }
+
+func (m *UsersModel) Login(Username, Password string) (*models.Users, error) {
+	stmt := `SELECT gender, username, fullName FROM users
+    WHERE password = ? AND username = ?`
+
+	row := m.DB.QueryRow(stmt, Password, Username)
+
+	user := &models.Users{}
+
+	err := row.Scan(&user.Gender, &user.Username, &user.FullName)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, models.ErrNoRecord
+		} else {
+			return nil, err
+		}
+	}
+
+	return user, nil
+}
