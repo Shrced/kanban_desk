@@ -1,0 +1,25 @@
+{{template "base" .}}
+
+{{define "title"}}Boards{{end}}
+
+
+{{define "main"}}
+<section class="loginSection">
+    <div class="loginFormSection">
+        <form id="loginForm" name="loginForm" action="/login" method="post" class="mt-4">
+            <p><label for="username">Логин</label></p>
+            <input type="username" id="username" name="username" autocomplete="on">
+            <p><label for="password">Пароль</label></p>
+            <input type="password" id="password" name="password" autocomplete="on">
+            <p><button class="buttonLittle" type="submit" name="submitBtn">Войти</button></p>
+            <p><a class="buttonLittle" href="/signup">Зарегистрироваться</a></p>
+        </form>
+        <!--p>
+            {{if . }}
+                {{.Message}}
+            {{end}}
+        </p-->
+        
+    </div>
+</section>
+{{end}}

@@ -1,0 +1,215 @@
+{{define "base"}}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>{{template "title" .}} - Kanban</title>
+            <link rel="stylesheet" type="text/css" href="/home/kottik/code/kanban/ui/static/css/style.css">
+            <link rel="shortcut icon" href="/home/kottik/code/kanban/ui/static/img/favicon.ico" type="image/x-icon">
+            <style>
+                body {
+                    margin: 0; /*0 100px 0 100px;*/
+                    background-color: #ebffc4; /* BACKLOG BACK */
+                    font-family: serif;
+                }
+
+                header {
+                    display: flex;
+                    background-color: #ffd1dc; /* HEADER BACK */
+                }
+
+                footer {
+                    padding: 18px;
+                }
+
+                .addTask {
+                    margin-left: 50px;
+                }
+
+                #loginForm {
+                    padding: 30px 0 50px 0;
+                    display: block;
+                }
+
+                .loginSection {
+                    padding: 30px 0 50px 0;
+                    width: 100%;
+                    background-color: #94bd43;
+                }
+
+                .loginFormSection {
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                }
+
+                .backlog {
+                    margin-top: 30px;
+                }
+
+                .backlog_name {
+                    text-align: center;
+                }
+
+                .sticker {
+                    margin: 7%;
+                    padding: 10px;
+                    background-color: #FFFFFF;
+                    border-radius: 20px;
+                    text-align: left;
+                    box-shadow: 1px 1px 5px #A8A66E;
+                }
+
+                .sticker_backlog {
+                    margin: 2%;
+                    padding: 10px;
+                    background-color: #ffffff;
+                    border-radius: 20px;
+                    text-align: left;
+                    box-shadow: 1px 1px 5px #A8A66E;
+                }
+
+                .left, .right {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .left {
+                    width: 30%;
+                }
+
+                .right {
+                    width: 70%;
+                }
+
+                .project_name {
+                    padding-left: 195px;
+                }
+
+                .quit_icon {
+                    width: 30px;
+                    height: 30px;
+                    margin: 0 0 0 10px;
+                }
+
+
+                .profile_icon {
+                    width: 40px;
+                    height: 40px;
+                    margin: 5px 10px 0 0;
+                }
+
+                .columns {
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .column1, .column3 {
+                    background-color: #faeedd;   /* CORNER COLUMNS BACK */
+                    width: 100%;
+                    text-align:center;
+                }
+
+                .column2 {
+                    background-color: #fff8e7; /* MIDDLE COLUMN BACK */
+                    width: 100%;
+                    text-align:center;
+                }
+
+                #task_pg2 {
+                    display: flex;
+                    margin: 1%;
+                    padding: 0 25px;
+                }
+
+                #task_pg3 {
+                    margin: 1%;
+                    padding: 25px 50px;
+                    height: 400px;
+                }
+
+                #task_name_pg2 {
+                    width: 70%;
+                }
+
+                .task_status {
+                    width: 30%;
+                }
+
+                .que {
+                    display: block;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
+
+                .button {
+                    text-decoration: none;
+                    color: black;
+                    border: 1px solid black;
+                    border-radius: 15px;
+                    padding: 10px;
+                    background-color: white;
+                }   
+
+                .buttonEdit {
+                    margin-top: 10px;
+                    text-decoration: none;
+                    color: black;
+                    border: 1px solid black;
+                    border-radius: 15px;
+                    padding: 10px;
+                    background-color: white;
+                }  
+
+                .buttonLittle {
+                    font-size: 12px;
+                    text-decoration: none;
+                    color: black;
+                    border: 1px solid black;
+                    border-radius: 10px;
+                    padding: 5px 10px;
+                    background-color: white;
+                }  
+
+
+                table {
+                    background: white;
+                    border: 1px solid #E4E5E7;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                td, th {
+                    text-align: left;
+                    padding: 9px 18px;
+                }
+
+                th:last-child, td:last-child {
+                    text-align: right;
+                    color: #000000;
+                }
+
+                tr {
+                    border-bottom: 1px solid #E4E5E7;
+                }
+
+                tr:nth-child(2n) {
+                    background-color: #F7F9FA;
+                }
+
+            </style>
+        </head>
+        <body>
+            {{template "header" .}}
+            <main>
+                {{template "main" .}}
+            </main>
+        </body>
+    </html>
+{{end}}

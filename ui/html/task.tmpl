@@ -1,0 +1,14 @@
+{{template "base" .}}
+
+{{define "title"}}Задача номер {{.Tasks.TaskID}}{{end}}
+
+{{define "main"}}
+    <div class="sticker" id="task_{{.Tasks.TaskID}}">
+    <a href="/task/update?id={{.Tasks.TaskID}}" class="buttonEdit">Редактировать задачу</a>
+        <div class="sticker">
+            <p>Имя задачи: {{.Tasks.TaskName}}</p>
+            <p>Приоритет задачи: {{.Tasks.Priority}}</p>
+            <p>Описание задачи: {{.Tasks.Description}}</p>
+        </div>
+    </div>
+{{end}}

@@ -1,0 +1,13 @@
+{{template "base" .}}
+
+{{define "title"}}Профиль пользователя {{.Users.FullName}}{{end}}
+
+{{define "main"}}
+    <div class="sticker" id="user_{{.Users.UserID}}">
+        <div class="sticker">
+            <p>Имя: {{.Users.FullName}}</p>
+            <p>Пол пользователя: {{.Users.Gender}}</p>
+            <p>Ник: {{.Users.Username}}</p>
+        </div>
+    </div>
+{{end}}

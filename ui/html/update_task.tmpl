@@ -1,0 +1,23 @@
+{{template "base" .}}
+
+{{define "title"}}Обновление задачи{{end}}
+
+
+{{define "main"}}
+    <section class="loginSection">
+        <div class="loginFormSection">
+            <h3>Обновление задачи</h3>
+            <form method="POST">
+                <label>Имя задачи</label><br>
+                <input type="text" name="task_name" /><br><br>
+                <label>Приоритет задачи</label><br>
+                <input type="text" name="priority" value="minor" /><br><br>
+                <label>Статус задачи</label><br>
+                <input type="text" name="status" /><br><br>
+                <label>Описание задачи</label><br>
+                <input type="text" name="description" /><br><br>
+                <input class="buttonLittle" type="submit" value="Обновить" />
+            </form>
+        </div>
+    </section>
+{{end}}

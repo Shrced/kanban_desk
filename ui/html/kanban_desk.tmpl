@@ -1,0 +1,43 @@
+{{template "base" .}}
+
+{{define "title"}}Boards{{end}}
+
+
+{{define "main"}}
+
+    <section class="columns">
+            <div class="column1">
+                <h3>To do</h3>
+                {{if .TasksList1}}
+                {{range .TasksList1}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Приоритет задачи: {{.Priority}}</p>
+                </div>
+                {{end}}
+                {{end}}
+            </div>
+            <div class="column2">
+                <h3>In progress</h3>
+                {{if .TasksList2}}
+                {{range .TasksList2}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Приоритет задачи: {{.Priority}}</p>
+                </div>
+                {{end}}
+                {{end}}
+            </div>
+            <div class="column3">
+                <h3>Done</h3>
+                {{if .TasksList3}}
+                {{range .TasksList3}}
+                <div class="sticker">
+                    <a href="/task?id={{.TaskID}}">{{.TaskName}}</a>
+                    <p>Приоритет задачи: {{.Priority}}</p>
+                </div>
+                {{end}}
+                {{end}}
+            </div>
+    </section>
+{{end}}

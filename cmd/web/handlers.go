@@ -17,36 +17,43 @@ import (
 var user_id_global int
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
+
+	if r.URL.Path != "/user/current_desk" {
 		app.notFound(w)
 		return
 	}
 
-	board, err := app.boards.GetCurrentBoard()
+	board, err := app.boards.GetCurrentBoard(user_id_global, "BoardTest")
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
-	tasks_list, err := app.tasks.GetBoardsTasks(board.BoardID)
 
-	data := &templateData{Boards: board, TasksList: tasks_list}
+	toDo, Progress, Done, err := app.tasks.GetBoardsTasks(board.BoardID)
 
-	files := []string{
-		"/home/kottik/code/kanban/ui/html/kanban_desk.html",
-		"/home/kottik/code/kanban/ui/html/base.layout.html",
-		"/home/kottik/code/kanban/ui/html/footer.partial.html",
-		"/home/kottik/code/kanban/ui/html/header.partial.html",
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
 	}
 
-	// Парсинг файлов шаблонов...
+	data := &templateData{Boards: board, TasksList1: toDo, TasksList2: Progress, TasksList3: Done}
+
+	files := []string{
+		"/home/kottik/code/kanban/ui/html/kanban_desk.tmpl",
+		"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+		"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+		"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
+	}
+
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// А затем выполняем их. Обратите внимание на передачу заметки с данными
-	// (структура models.Boards) в качестве последнего параметра.
 	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
@@ -60,6 +67,7 @@ func (app *application) showBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s, err := app.boards.GetBoard(id)
+
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -67,28 +75,34 @@ func (app *application) showBoard(w http.ResponseWriter, r *http.Request) {
 			app.serverError(w, err)
 		}
 		return
-
 	}
-	tasks_list, err := app.tasks.GetBoardsTasks(id)
 
-	data := &templateData{Boards: s, TasksList: tasks_list}
+	toDo, Progress, Done, err := app.tasks.GetBoardsTasks(id)
+
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+
+	data := &templateData{Boards: s, TasksList1: toDo, TasksList2: Progress, TasksList3: Done}
 
 	files := []string{
-		"/home/kottik/code/kanban/ui/html/kanban_desk.html",
-		"/home/kottik/code/kanban/ui/html/base.layout.html",
-		"/home/kottik/code/kanban/ui/html/footer.partial.html",
-		"/home/kottik/code/kanban/ui/html/header.partial.html",
+		"/home/kottik/code/kanban/ui/html/kanban_desk.tmpl",
+		"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+		"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+		"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 	}
 
-	// Парсинг файлов шаблонов...
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// А затем выполняем их. Обратите внимание на передачу заметки с данными
-	// (структура models.Boards) в качестве последнего параметра.
 	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
@@ -97,7 +111,7 @@ func (app *application) showBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) showBoards(w http.ResponseWriter, r *http.Request) {
-	s, err := app.boards.GetUsersBoards(1)
+	s, err := app.boards.GetUsersBoards(user_id_global)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -111,42 +125,23 @@ func (app *application) showBoards(w http.ResponseWriter, r *http.Request) {
 	data := &templateData{BoardsList: s}
 
 	files := []string{
-		"/home/kottik/code/kanban/ui/html/boards_list.html",
-		"/home/kottik/code/kanban/ui/html/base.layout.html",
-		"/home/kottik/code/kanban/ui/html/footer.partial.html",
-		"/home/kottik/code/kanban/ui/html/header.partial.html",
+		"/home/kottik/code/kanban/ui/html/boards_list.tmpl",
+		"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+		"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+		"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 	}
 
-	// Парсинг файлов шаблонов...
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// А затем выполняем их. Обратите внимание на передачу заметки с данными
-	// (структура models.Boards) в качестве последнего параметра.
 	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
 	}
 }
-
-// func (app *application) createBoard(w http.ResponseWriter, r *http.Request) {
-// 	if r.Method != http.MethodPost {
-// 		w.Header().Set("Allow", http.MethodPost)
-// 		app.clientError(w, http.StatusMethodNotAllowed) // Используем помощник clientError()
-// 		return
-// 	}
-// 	id, err := app.boards.InsertBoard("test_board", 1, []int{1})
-// 	if err != nil {
-// 		app.serverError(w, err)
-// 		return
-// 	}
-// 	http.Redirect(w, r, fmt.Sprintf("/kanban?id=%d", id), http.StatusSeeOther)
-
-// 	w.Write([]byte("Создание новой kanban..."))
-// }
 
 func (app *application) createTask(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
@@ -158,13 +153,14 @@ func (app *application) createTask(w http.ResponseWriter, r *http.Request) {
 
 		TaskName := r.FormValue("task_name")
 		Status := r.FormValue("status")
+		Description := r.FormValue("description")
+		Priority := r.FormValue("priority")
 		BoardID, err := strconv.Atoi(r.FormValue("board_id"))
 		if err != nil {
 			panic(err)
 		}
 
-		id, err := app.tasks.InsertTask(TaskName, Status, BoardID)
-		// app.tasks_boards.InsertTaskBoards(id, BoardID)
+		id, err := app.tasks.InsertTask(TaskName, BoardID, Status, Description, Priority)
 
 		if err != nil {
 			app.serverError(w, err)
@@ -176,7 +172,7 @@ func (app *application) createTask(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Создание новой задачи..."))
 
 	} else {
-		board, err := app.boards.GetCurrentBoard()
+		board, err := app.boards.GetCurrentBoard(user_id_global, "NewBoard")
 		if err != nil {
 			app.serverError(w, err)
 			return
@@ -184,13 +180,71 @@ func (app *application) createTask(w http.ResponseWriter, r *http.Request) {
 
 		data := &templateData{Boards: board}
 		files := []string{
-			"/home/kottik/code/kanban/ui/html/new_task.form.html",
-			"/home/kottik/code/kanban/ui/html/base.layout.html",
-			"/home/kottik/code/kanban/ui/html/footer.partial.html",
-			"/home/kottik/code/kanban/ui/html/header.partial.html",
+			"/home/kottik/code/kanban/ui/html/new_task.form.tmpl",
+			"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+			"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+			"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 		}
 
-		// Парсинг файлов шаблонов...
+		ts, err := template.ParseFiles(files...)
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+		err = ts.Execute(w, data)
+		if err != nil {
+			app.serverError(w, err)
+		}
+
+	}
+
+}
+
+func (app *application) updateTask(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
+		app.notFound(w)
+		return
+	}
+
+	if r.Method == "POST" {
+
+		err := r.ParseForm()
+		if err != nil {
+			log.Println(err)
+		}
+
+		TaskName := r.FormValue("task_name")
+		Status := r.FormValue("status")
+		Priority := r.FormValue("priority")
+		Description := r.FormValue("description")
+
+		id, err := app.tasks.UpdateTask(user_id_global, id, TaskName, Status, Description, Priority)
+
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+
+		http.Redirect(w, r, fmt.Sprintf("/task?id=%d", id), http.StatusSeeOther)
+
+		w.Write([]byte("Обновление задачи..."))
+
+	} else {
+		board, err := app.boards.GetCurrentBoard(user_id_global, "NewBoard")
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+
+		data := &templateData{Boards: board}
+		files := []string{
+			"/home/kottik/code/kanban/ui/html/update_task.tmpl",
+			"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+			"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+			"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
+		}
+
 		ts, err := template.ParseFiles(files...)
 		if err != nil {
 			app.serverError(w, err)
@@ -225,21 +279,18 @@ func (app *application) showTask(w http.ResponseWriter, r *http.Request) {
 	data := &templateData{Tasks: task}
 
 	files := []string{
-		"/home/kottik/code/kanban/ui/html/task.html",
-		"/home/kottik/code/kanban/ui/html/base.layout.html",
-		"/home/kottik/code/kanban/ui/html/footer.partial.html",
-		"/home/kottik/code/kanban/ui/html/header.partial.html",
+		"/home/kottik/code/kanban/ui/html/task.tmpl",
+		"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+		"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+		"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 	}
 
-	// Парсинг файлов шаблонов...
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// А затем выполняем их. Обратите внимание на передачу заметки с данными
-	// (структура models.Boards) в качестве последнего параметра.
 	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
@@ -285,7 +336,7 @@ func (app *application) Login(w http.ResponseWriter, r *http.Request) {
 
 		user_id_global = user.UserID
 
-		http.Redirect(w, r, fmt.Sprintf("/"), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/user/current_desk"), http.StatusSeeOther)
 
 	} else {
 		type answer struct {
@@ -293,15 +344,13 @@ func (app *application) Login(w http.ResponseWriter, r *http.Request) {
 		}
 		message := "Opps"
 		data := answer{message}
-		// data := &templateData{Boards: board}
 		files := []string{
-			"/home/kottik/code/kanban/ui/html/login.html",
-			"/home/kottik/code/kanban/ui/html/base.layout.html",
-			"/home/kottik/code/kanban/ui/html/footer.partial.html",
-			"/home/kottik/code/kanban/ui/html/header.partial.html",
+			"/home/kottik/code/kanban/ui/html/login.tmpl",
+			"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+			"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+			"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 		}
 
-		// Парсинг файлов шаблонов...
 		ts, err := template.ParseFiles(files...)
 		if err != nil {
 			app.serverError(w, err)
@@ -397,12 +446,11 @@ func (app *application) SignUp(w http.ResponseWriter, r *http.Request) {
 		}
 		message := "Opps"
 		data := answer{message}
-		// data := &templateData{Boards: board}
 		files := []string{
-			"/home/kottik/code/kanban/ui/html/signup.html",
-			"/home/kottik/code/kanban/ui/html/base.layout.html",
-			"/home/kottik/code/kanban/ui/html/footer.partial.html",
-			"/home/kottik/code/kanban/ui/html/header.partial.html",
+			"/home/kottik/code/kanban/ui/html/signup.tmpl",
+			"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+			"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+			"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
 		}
 
 		// Парсинг файлов шаблонов...
@@ -416,4 +464,38 @@ func (app *application) SignUp(w http.ResponseWriter, r *http.Request) {
 			app.serverError(w, err)
 		}
 	}
+}
+
+func (app *application) showProfile(w http.ResponseWriter, r *http.Request) {
+	s, err := app.users.GetUser(user_id_global)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+
+	}
+
+	data := &templateData{Users: s}
+
+	files := []string{
+		"/home/kottik/code/kanban/ui/html/profile.tmpl",
+		"/home/kottik/code/kanban/ui/html/base.layout.tmpl",
+		"/home/kottik/code/kanban/ui/html/footer.partial.tmpl",
+		"/home/kottik/code/kanban/ui/html/header.partial.tmpl",
+	}
+
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	err = ts.Execute(w, data)
+	if err != nil {
+		app.serverError(w, err)
+	}
+
 }

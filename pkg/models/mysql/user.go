@@ -28,14 +28,14 @@ func (m *UsersModel) InsertUser(gender string, username string, password string,
 }
 
 func (m *UsersModel) GetUser(UserID int) (*models.Users, error) {
-	stmt := `SELECT gender, username, password, fullName FROM users
+	stmt := `SELECT gender, username, password, fullName, userID FROM users
     WHERE userID = ?`
 
 	row := m.DB.QueryRow(stmt, UserID)
 
 	s := &models.Users{}
 
-	err := row.Scan(&s.Gender, &s.Username, &s.Password, &s.FullName)
+	err := row.Scan(&s.Gender, &s.Username, &s.Password, &s.FullName, &s.UserID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, models.ErrNoRecord
@@ -48,14 +48,14 @@ func (m *UsersModel) GetUser(UserID int) (*models.Users, error) {
 }
 
 func (m *UsersModel) Login(Username, Password string) (*models.Users, error) {
-	stmt := `SELECT gender, username, fullName FROM users
+	stmt := `SELECT gender, username, fullName, userID FROM users
     WHERE password = ? AND username = ?`
 
 	row := m.DB.QueryRow(stmt, Password, Username)
 
 	user := &models.Users{}
 
-	err := row.Scan(&user.Gender, &user.Username, &user.FullName)
+	err := row.Scan(&user.Gender, &user.Username, &user.FullName, &user.UserID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, models.ErrNoRecord

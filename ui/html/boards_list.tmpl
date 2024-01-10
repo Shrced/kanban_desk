@@ -1,0 +1,24 @@
+{{template "base" .}}
+{{define "title"}}Страница со всеми досками пользователя{{end}}
+
+{{define "main"}}
+
+    {{if .BoardsList}}
+        <table>
+        <tr>
+            <th>Имя доски</th>
+            <th>Дата создания</th>
+        </tr>
+        {{range .BoardsList}}
+        <tr>
+            <td><a href="/kanban?id={{.BoardID}}">{{.BoardName}}</a></td>
+            <td>{{.CreateDate}}</td>
+        </tr>
+        {{end}}
+        </table>
+
+    {{else}}
+        <p>Здесь ничего нет... пока что!</p>
+    {{end}}
+
+{{end}}

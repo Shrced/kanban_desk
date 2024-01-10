@@ -1,0 +1,16 @@
+{{define "header"}}
+<header>
+    <div class="left">
+        <!--img src="/profile_icon.png" class="profile_icon" alt="Профиль"-->
+        <a href="/user/profile" class="button">Профиль</a>
+    </div>
+    <div class="right">
+        <h3 class="project_name">Kanban Project</h3>
+        <a href="/kanban/kanban_list" class="button">Список досок пользователя</a>
+        <a href="/user/current_desk" class="button">Доска</a>
+        <a href="/task/create" class="button">Создать новую задачу</a>
+        <a href="/login" class="button">Выход</a>
+        <!--img src="/quit_icon.png" class="quit_icon" alt="Выход"-->
+    </div>
+</header>
+{{end}}

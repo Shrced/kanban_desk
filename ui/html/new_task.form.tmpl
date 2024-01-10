@@ -1,0 +1,25 @@
+{{template "base" .}}
+
+{{define "title"}}Добавление задачи{{end}}
+
+
+{{define "main"}}
+    <section class="loginSection">
+        <div class="loginFormSection">
+            <h3>Добавление задачи</h3>
+            <form method="POST">
+                <label>Имя задачи</label><br>
+                <input type="text" name="task_name" /><br><br>
+                <label>Приоритет задачи</label><br>
+                <input type="text" name="priority" /><br><br>
+                <label>Статус задачи</label><br>
+                <input type="text" name="status" /><br><br>
+                <label>Описание задачи</label><br>
+                <input type="text" name="description" /><br><br>
+                <label>Id доски для прикрепления</label><br>
+                <input type="number" name="board_id" placeholder="Current is:{{.Boards.BoardID}}" value="{{.Boards.BoardID}}"/><br><br>
+                <input class="buttonLittle" type="submit" value="Создать" />
+            </form>
+        </div>
+    </section>
+{{end}}
